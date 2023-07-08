@@ -2,9 +2,20 @@ import React from "react";
 import { AppBar, Toolbar, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import { CityLogo } from "../Utils/tools";
+import { CityLogo, showToastError, showToastSuccess } from "../Utils/tools";
+import { auth } from "../../firebase";
+import { signOut } from "firebase/auth";
 
-const Header = () =>{
+const Header = ({user}) =>{
+
+    const logoutHandler = () =>{
+        signOut(auth).then(()=>{
+            showToastSuccess('Signed Out!')
+        }).catch(err=>{
+            showToastError(err.message)
+        })
+    }
+
     return (
         <AppBar
             position="fixed"
@@ -35,9 +46,19 @@ const Header = () =>{
                     <Button color="inherit"> Matches </Button>
                 </Link>
 
-                <Link to='/dashboard'>
-                    <Button color="inherit"> Dashboard </Button>
-                </Link>
+                {
+                    user?
+                    <>
+                        <Link to='/dashboard'>
+                            <Button color="inherit"> Dashboard </Button>
+                        </Link>
+                        <Button color="inherit" onClick={()=>logoutHandler()}> Log out</Button>
+                    </>
+                    
+                    :
+                    null
+                }
+                
             </Toolbar>
         </AppBar>
     )
