@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { Redirect } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
 
@@ -46,7 +47,7 @@ const Signin = (props) =>{
         })
     }
 
-    return(
+    return !props.user? (
         <div className="container">
             <div className="signin_wrapper" style={{margin:'100px'}}>
 
@@ -91,7 +92,7 @@ const Signin = (props) =>{
 
             </div>
         </div>
-    )
+    ) : <Redirect to='/dashboard'/>
 }
 
 export default Signin;
