@@ -8,6 +8,7 @@ import Home from './components/home';
 import Signin from "./components/SignIn";
 import Dashboard from './components/Admin/Dashboard';
 import AuthGuard from "./components/Hoc/Auth";
+import AdminPlayers from './components/Admin/Players';
 
 //toastify
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +19,7 @@ const Routes = ({user}) => {
         <BrowserRouter>
             <Header user={user}/>
             <Switch>
+                <Route path='/admin_players' exact component={AuthGuard(AdminPlayers)}/>   
                 <Route path='/dashboard' exact component={AuthGuard(Dashboard)}/>
                 <Route path='/' exact component={Home}/>
                 <Route path='/sign_in' exact component={ props => (<Signin {...props} user={user}/>)}/>
