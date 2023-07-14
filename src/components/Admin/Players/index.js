@@ -68,7 +68,7 @@ const AdminPlayers = () =>{
                 <Button
                     disableElevation
                     variant="outlined"
-                    to={'/admin_player/add_player'}
+                    to={'/admin_players/add_player'}
                     component={Link}
                 >
                     Add Player
