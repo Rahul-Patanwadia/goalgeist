@@ -4,6 +4,7 @@ import mcityLogo from '../../Resources/images/logos/manchester_city_logo.png'
 import { toast } from "react-toastify";
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
+import { FormHelperText} from '@mui/material'
 
 export const CityLogo = (props) =>{
 
@@ -58,9 +59,25 @@ export const Tag = (props) =>{
 }
 
 export const logoutHandler = () =>{
-    signOut(auth).then(()=>{
+    signOut(auth).then(()=>(
         showToastSuccess('Signed Out!')
-    }).catch(err=>{
+    )).catch(err=>(
         showToastError(err.message)
-    })
+    ))
+}
+
+export const textErrorHelper = (formik,values) =>({
+    error:formik.errors[values] && formik.touched[values],
+    helperText: formik.errors[values] && formik.touched[values]? formik.errors[values] : null
+})
+
+export const selectErrorHelper = (formik,values) =>{
+    if(formik.errors[values] && formik.touched[values]){
+        return (<FormHelperText>{formik.errors[values]}</FormHelperText>)
+    }
+    return false;
+}
+
+export const isSelectError = (formik,values) =>{
+    return (formik.errors[values] && formik.touched[values]);
 }

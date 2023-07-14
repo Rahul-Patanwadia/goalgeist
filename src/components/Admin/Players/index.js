@@ -63,7 +63,6 @@ const AdminPlayers = () =>{
 
     return(
         <AdminLayout title='The Players'>
-
             <div className="mb-5">
                 <Button
                     disableElevation
