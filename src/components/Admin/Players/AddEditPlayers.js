@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../Hoc/AdminLayout";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import { showToastError, showToastSuccess } from "../../Utils/tools";
+import { showToastSuccess } from "../../Utils/tools";
 import { TextField, Select, MenuItem, FormControl, Button } from "@mui/material";
 import { db } from "../../../firebase";
 import { textErrorHelper, selectErrorHelper, isSelectError } from "../../Utils/tools";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 const defaultValues = {
     name:'',
@@ -14,11 +16,13 @@ const defaultValues = {
     position:''
 }
 
-const AddEditPlayers = () =>{
+const AddEditPlayers = (props) =>{
 
     const [formType, setFormType] = useState('')
     const [values,setValues] = useState(defaultValues)
     const [loading, setLoading] = useState(false)
+    const history = useHistory();
+    let {playerid} = useParams();
 
     const formik = useFormik({
         enableReinitialize:true,
@@ -35,20 +39,66 @@ const AddEditPlayers = () =>{
                 .min(0,'The minimum is 0').max(100, 'The max is 100'),
             position:Yup.string()
                 .required('This input is required')
-        })
+        }),
+        onSubmit:(values)=>{
+            submitForm(values);
+        }
     });
+
+    const submitUtil = async (values) =>{
+        try {
+            const docRef = await addDoc(collection(db, "players"), values);
+            console.log("Document written with ID: ", docRef.id);
+            showToastSuccess('Player added successfully')
+            formik.resetForm();
+            setLoading(false)
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
+    }
+
+    const updateVal = async(values) =>{
+        await setDoc(doc(db, "players", playerid), values);
+        setLoading(false)
+        showToastSuccess('Player details edited successfully!')
+    }
+
+    const submitForm = (values) =>{
+        setLoading(true)
+        if(formType === 'add')
+        {
+            submitUtil(values)
+            history.push('/admin_players')
+        }
+        else{
+            updateVal(values)      
+        }
+    }
+
+    const fetchData = async(docRef) =>{
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            setValues({...docSnap.data()});
+            console.log(values)
+          } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+          }
+    }
 
     useEffect(()=>{
         const param = window.location.pathname
         if(param.match('edit_player')){
             setFormType('edit')
-            setValues({name:'no name'})
+            const docRef = doc(db, "players", playerid);
+            fetchData(docRef)
+            console.log(values)
         }
         else{
             setFormType('add');
             setValues(defaultValues)
         }
-    },[window.location.pathname])
+    },[window.location.pathname, values])
 
     return(
         <AdminLayout title={formType==='add'?'Add Player':'Edit Player'}>
@@ -88,6 +138,7 @@ const AddEditPlayers = () =>{
                         <div className="mb-5">
                             <FormControl>
                                 <TextField 
+                                    type="number"
                                     id="number"
                                     name="number"
                                     variant="outlined"
@@ -104,7 +155,6 @@ const AddEditPlayers = () =>{
                                     id="position"
                                     name="position"
                                     variant="outlined"
-                                    displayEmpty
                                     {...formik.getFieldProps('position')}
                                 >
                                     <MenuItem value='' disabled>Select a Position</MenuItem>
