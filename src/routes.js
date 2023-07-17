@@ -10,6 +10,7 @@ import Dashboard from './components/Admin/Dashboard';
 import AuthGuard from "./components/Hoc/Auth";
 import AdminPlayers from './components/Admin/Players';
 import AddEditPlayers from "./components/Admin/Players/AddEditPlayers";
+import TheTeam from "./components/The_team";
 
 //toastify
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,6 +26,7 @@ const Routes = ({user}) => {
                 <Route path='/admin_players' exact component={AuthGuard(AdminPlayers)}/>   
                 <Route path='/dashboard' exact component={AuthGuard(Dashboard)}/>
                 <Route path='/' exact component={Home}/>
+                <Route path='/the_team' exact component={TheTeam}/>
                 <Route path='/sign_in' exact component={ props => (<Signin {...props} user={user}/>)}/>
             </Switch>
             <ToastContainer/>
