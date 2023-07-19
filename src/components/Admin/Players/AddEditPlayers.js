@@ -79,7 +79,6 @@ const AddEditPlayers = (props) =>{
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             setValues({...docSnap.data()});
-            console.log(values)
           } else {
             // docSnap.data() will be undefined in this case
             console.log("No such document!");
