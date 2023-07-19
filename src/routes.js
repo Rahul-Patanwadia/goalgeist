@@ -11,6 +11,8 @@ import AuthGuard from "./components/Hoc/Auth";
 import AdminPlayers from './components/Admin/Players';
 import AddEditPlayers from "./components/Admin/Players/AddEditPlayers";
 import TheTeam from "./components/The_team";
+import AdminMatches from "./components/Admin/Matches";
+import AddEditMatch from "./components/Admin/Matches/addEditMatch";
 
 //toastify
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +23,9 @@ const Routes = ({user}) => {
         <BrowserRouter>
             <Header user={user}/>
             <Switch>
+                <Route path='/admin_matches' exact component={AuthGuard(AdminMatches)}/>
+                <Route path='/admin_matches/add_match' exact component={AuthGuard(AddEditMatch)}/>
+                <Route path='/admin_matches/edit_match/:matchid' exact component={AuthGuard(AddEditMatch)}/>
                 <Route path='/admin_players/edit_player/:playerid' exact component={AuthGuard(AddEditPlayers)}/>
                 <Route path='/admin_players/add_player' exact component={AuthGuard(AddEditPlayers)}/>  
                 <Route path='/admin_players' exact component={AuthGuard(AdminPlayers)}/>   
