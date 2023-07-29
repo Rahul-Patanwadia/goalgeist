@@ -13,6 +13,7 @@ import AddEditPlayers from "./components/Admin/Players/AddEditPlayers";
 import TheTeam from "./components/The_team";
 import AdminMatches from "./components/Admin/Matches";
 import AddEditMatch from "./components/Admin/Matches/addEditMatch";
+import TheMatches from "./components/TheMatches";
 
 //toastify
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,6 +33,7 @@ const Routes = ({user}) => {
                 <Route path='/dashboard' exact component={AuthGuard(Dashboard)}/>
                 <Route path='/' exact component={Home}/>
                 <Route path='/the_team' exact component={TheTeam}/>
+                <Route path='/the_matches' exact component={TheMatches}/>
                 <Route path='/sign_in' exact component={ props => (<Signin {...props} user={user}/>)}/>
             </Switch>
             <ToastContainer/>
